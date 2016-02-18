@@ -16,6 +16,20 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         // associations can be defined here
+      },
+      authenticate: function(email, password, callback){
+        this.find({
+          where: {
+            email: email
+          }
+        }).then(function(user){
+          if (!user) return callback(null, false);
+          bcrypt.compare(password, user.password, function(err, result){
+            if(err) return callback(err);
+            //return error as null, then return result if user is false
+            callback(null, result ? user : false);
+          });
+        });
       }
     },
     hooks: {

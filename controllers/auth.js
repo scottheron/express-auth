@@ -34,7 +34,23 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/login', function(req, res) {
-  res.send(req.body);
+  var email = req.body.email;
+  var password = req.body.password;
+  db.user.authenticate(email, password, function(err, user){
+  	if (err){
+  		res.send(err);
+  	} else if (user) {
+  		req.session.userId = user.id;
+  		res.redirect('/');
+  	} else {
+  		res.send('Email and/or password invalid');
+  	}
+  });
+});
+
+router.get('/logout', function(req, res){
+	req.session.userId = false;
+	res.redirect('/');
 });
 
 module.exports = router;

@@ -14,13 +14,12 @@ app.use(session({
 }));
 
 app.get('/', function(req, res) {
-  console.log(req.session.animal);
+  console.log(req.session.userId);
   res.render('index');
 
 });
 
 app.get('/secret', function(req, res) {
-  req.session.animal = 'dog';
   res.render('secret');
 });
 
